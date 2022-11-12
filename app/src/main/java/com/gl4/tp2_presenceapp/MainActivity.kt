@@ -23,9 +23,12 @@ class MainActivity : AppCompatActivity() {
         tousRadio.isChecked = true
 
         var students = arrayListOf<Student>(
-            Student("Foulen", "Foulen", "M", true),
-            Student("Achour", "Achour", "F", true),
-            Student("Foulena", "Ben Foulen", "F", false),
+            Student(0,"Foulen", "Foulen", "M", true),
+            Student(1,"Achour", "Achour", "F", true),
+            Student(2,"Foulena", "Ben Foulen", "F", false),
+            Student(3,"Ben Ahmed", "Ahmed", "M", true),
+            Student(4,"Ahmed", "Iheb", "M", false),
+
         )
 
         var studentsAdapter = StudentsAdapter(students)

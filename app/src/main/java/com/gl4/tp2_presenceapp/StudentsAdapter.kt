@@ -1,14 +1,19 @@
 package com.gl4.tp2mobile
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.gl4.tp2_presenceapp.R
+import kotlin.math.abs
 
 class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapter<StudentsAdapter.ViewHolder>(), Filterable {
 
+    var presentStudents : ArrayList<Student> = data.filter { s -> s.present == true } as ArrayList<Student>
+    var absentStudents : ArrayList<Student> = data.filter { s -> s.present == false } as ArrayList<Student>
     var dataFilterList : ArrayList<Student> = data
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -21,9 +26,6 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
             checkBox = itemView.findViewById(R.id.presentCheckBox)
         }
     }
-
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -41,8 +43,9 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
         }
         holder.checkBox.isChecked = dataFilterList[position].present
 
-        holder.checkBox.setOnClickListener{
-
+        holder.checkBox.setOnCheckedChangeListener{ view, value ->
+            if(position < dataFilterList.size)
+                data[dataFilterList[position].id].present = value
         }
 
     }
@@ -58,13 +61,21 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
                 if(charSearch.isEmpty()) {
                     dataFilterList = data
                 } else {
-                    val resultList = ArrayList<Student>()
+                    /*val resultList = ArrayList<Student>()
                     for (student in data) {
                         if (student.present == charSearch.toBoolean()) {
                             resultList.add(student)
                         }
                     }
-                    dataFilterList = resultList
+                    dataFilterList = resultList*/
+                    if(charSearch.toBoolean() == true){
+                        presentStudents = data.filter { s -> s.present == true } as ArrayList<Student>
+                        dataFilterList = presentStudents
+                    }
+                    else{
+                        absentStudents = data.filter { s -> s.present == false } as ArrayList<Student>
+                        dataFilterList = absentStudents
+                    }
                 }
                 val filterResults = FilterResults()
                 filterResults.values = dataFilterList
