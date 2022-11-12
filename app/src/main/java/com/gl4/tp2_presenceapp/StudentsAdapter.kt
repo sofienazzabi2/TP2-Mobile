@@ -15,6 +15,7 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
     var presentStudents : ArrayList<Student> = data.filter { s -> s.present == true } as ArrayList<Student>
     var absentStudents : ArrayList<Student> = data.filter { s -> s.present == false } as ArrayList<Student>
     var dataFilterList : ArrayList<Student> = data
+    var filterChoice = 0;
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val image : ImageView
@@ -44,8 +45,15 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
         holder.checkBox.isChecked = dataFilterList[position].present
 
         holder.checkBox.setOnCheckedChangeListener{ view, value ->
-            if(position < dataFilterList.size)
+            if(position < dataFilterList.size){
                 data[dataFilterList[position].id].present = value
+                if(filterChoice ==0)
+                    filter.filter("")
+                else if(filterChoice==1)
+                    filter.filter("true")
+                else if(filterChoice==2)
+                    filter.filter("false")
+            }
         }
 
     }
@@ -60,6 +68,7 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
                 val charSearch = constraint.toString()
                 if(charSearch.isEmpty()) {
                     dataFilterList = data
+                    filterChoice=0;
                 } else {
                     /*val resultList = ArrayList<Student>()
                     for (student in data) {
@@ -68,13 +77,14 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
                         }
                     }
                     dataFilterList = resultList*/
+                    filterList()
                     if(charSearch.toBoolean() == true){
-                        presentStudents = data.filter { s -> s.present == true } as ArrayList<Student>
                         dataFilterList = presentStudents
+                        filterChoice=1;
                     }
                     else{
-                        absentStudents = data.filter { s -> s.present == false } as ArrayList<Student>
                         dataFilterList = absentStudents
+                        filterChoice=2;
                     }
                 }
                 val filterResults = FilterResults()
@@ -88,6 +98,11 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
             }
 
         }
+    }
+
+    fun filterList(){
+        absentStudents = data.filter { s -> s.present == false } as ArrayList<Student>
+        presentStudents = data.filter { s -> s.present == true } as ArrayList<Student>
     }
 
 
