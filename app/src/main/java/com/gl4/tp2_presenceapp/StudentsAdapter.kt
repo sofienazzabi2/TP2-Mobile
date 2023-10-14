@@ -70,13 +70,7 @@ class StudentsAdapter(private val data: ArrayList<Student>) : RecyclerView.Adapt
                     dataFilterList = data
                     filterChoice=0;
                 } else {
-                    /*val resultList = ArrayList<Student>()
-                    for (student in data) {
-                        if (student.present == charSearch.toBoolean()) {
-                            resultList.add(student)
-                        }
-                    }
-                    dataFilterList = resultList*/
+
                     filterList()
                     if(charSearch.toBoolean() == true){
                         dataFilterList = presentStudents
